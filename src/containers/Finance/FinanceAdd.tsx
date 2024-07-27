@@ -11,7 +11,8 @@ const FinanceAdd = ()=>{
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const isFetching = useAppSelector(selectOneIncomeExpenseCreateLoading);
-    const incomeExpense = useAppSelector(selectOneIncomeExpenseCreate)
+    const incomeExpense = useAppSelector(selectOneIncomeExpenseCreate);
+    
     
     
     const onSubmit = async (finance: ApiIncomeExpense) => {
@@ -29,9 +30,7 @@ const FinanceAdd = ()=>{
     return(
         <>
         {isFetching && <Spinner />}
-        {incomeExpense && (
-          <FormFinance onSubmit={onSubmit} isLoading={isFetching}/>
-        )}
+        <FormFinance onSubmit={onSubmit} isLoading={isFetching}/>
         </>
     )
 }

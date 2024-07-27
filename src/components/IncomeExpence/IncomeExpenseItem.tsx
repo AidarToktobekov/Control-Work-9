@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useEffect } from "react";
 import { fetchOneCategory } from "../../store/financeThunks";
-import { selectIncomeExpense } from "../../store/incomeExpenseSlice";
+import { minusTotal, plusTotal, selectIncomeExpense } from "../../store/incomeExpenseSlice";
 
 interface Props{
     amount: number;
@@ -12,14 +12,14 @@ interface Props{
     createdAt: string;
 }
 
-const IncomeExpenseItem:React.FC<Props> = ({amount,category,id,deleteCategory,createdAt})=>{
+const IncomeExpenseItem:React.FC<Props> = ({ amount,category,id,deleteCategory,createdAt})=>{
 
     const dispatch = useAppDispatch();
     const oneCategory = useAppSelector(selectIncomeExpense);
 
     useEffect(()=>{
         dispatch(fetchOneCategory(category))
-    },[]);
+    },[dispatch]);
 
     let money = null;
 

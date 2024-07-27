@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectIncomesExpenses, selectIncomesExpensesLoading } from "../../store/incomeExpenseSlice";
+import { selectIncomesExpenses, selectIncomesExpensesLoading, selectTotal } from "../../store/incomeExpenseSlice";
 import { deleteIncomeExpense, fetchIncomeExpense } from "../../store/financeThunks";
 import Spinner from "../../components/Spinner/Spinner";
 import IncomeExpenseItem from "../../components/IncomeExpence/IncomeExpenseItem";
@@ -11,20 +11,22 @@ const Finance = ()=>{
    const incomeExpense = useAppSelector(selectIncomesExpenses)
    const categoriesLoading = useAppSelector(selectIncomesExpensesLoading)
 
+   const total = useAppSelector(selectTotal);
+
    useEffect(()=>{
-       dispatch(fetchIncomeExpense())
+      dispatch(fetchIncomeExpense())
    },[dispatch])
 
    const onDelete = async (id: string) => {
        await dispatch(deleteIncomeExpense(id));
        await dispatch(fetchIncomeExpense());
-     };
+   };
 
    return(
       <>
          <div className="container">
             <div className="p-3 rounded-2 border border-2 fs-4" style={{width: 'fit-content'}}>
-               Total: 
+               Total: {total}
             </div>
             <div className="list-group">
             {categoriesLoading ? (

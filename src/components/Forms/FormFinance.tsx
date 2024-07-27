@@ -27,8 +27,6 @@ const FormFinance: React.FC<Props> = ({existingFinance, onSubmit, isLoading = fa
         dispatch(fetchCategory())
     },[dispatch])
     const categories = useAppSelector(selectCategories)
-    console.log(categories);
-    
     const categoriesLoading = useAppSelector(selectCategoriesLoading)
 
 
@@ -67,7 +65,7 @@ const FormFinance: React.FC<Props> = ({existingFinance, onSubmit, isLoading = fa
                 </h3>
                 <div className="mb-3">
                     <label className="form-label">Amount</label>
-                    <input type="number" className="form-control" onChange={changeFinance} value={financeInfo.amount} name="amount" placeholder="Amount" required/>
+                    <input type="number" min="1" className="form-control" onChange={changeFinance} value={financeInfo.amount} name="amount" placeholder="Amount" required/>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Category</label>

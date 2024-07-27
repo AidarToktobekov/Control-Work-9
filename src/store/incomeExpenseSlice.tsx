@@ -1,6 +1,6 @@
 import { ApiCategories, ApiCategory, ApiIncomeExpense, IncomeExpense } from '../types';
-import { createSlice } from '@reduxjs/toolkit';
-import {createCategory, createincomeExpense, deleteCategory, fetchCategory, fetchIncomeExpense, fetchOneCategory, fetchOneIncomeExpense, updateCategory, updateIncomeExpense} from './financeThunks';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createincomeExpense,  deleteIncomeExpense, fetchIncomeExpense, fetchOneCategory, fetchOneIncomeExpense, updateIncomeExpense} from './financeThunks';
 
 interface CategoriesState {
   items: IncomeExpense[];
@@ -12,6 +12,7 @@ interface CategoriesState {
   categoryLoading: boolean;
   oneIncomeExpense: ApiIncomeExpense | null,
   createLoading: boolean;
+  total: number;
 }
 
   const initialState: CategoriesState = {
@@ -24,12 +25,20 @@ interface CategoriesState {
     oneIncomeExpense: null,
     oneCategory: {},
     createLoading: false,
+    total: 0,
   };
 
 export const incomeExpenseSlice = createSlice({
   name: 'incomeExpense',
   initialState,
-  reducers: {},
+  reducers: {
+    plusTotal: (state, { payload: amount }: PayloadAction<number>) => {
+      state.total = state.total + amount
+    },
+    minusTotal: (state, { payload: amount }: PayloadAction<number>) => {
+      state.total = state.total - amount
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchIncomeExpense.pending, (state) => {
@@ -64,16 +73,16 @@ export const incomeExpenseSlice = createSlice({
       .addCase(fetchOneIncomeExpense.rejected, (state) => {
         state.oneIncomeExpenseLoading = false;
       });
-    // builder
-    //   .addCase(deleteCategory.pending, (state) => {
-    //     state.deleteLoading = true;
-    //   })
-    //   .addCase(deleteCategory.fulfilled, (state) => {
-    //     state.deleteLoading = false;
-    //   })
-    //   .addCase(deleteCategory.rejected, (state) => {
-    //     state.deleteLoading = false;
-    //   });
+    builder
+      .addCase(deleteIncomeExpense.pending, (state) => {
+        state.deleteLoading = true;
+      })
+      .addCase(deleteIncomeExpense.fulfilled, (state) => {
+        state.deleteLoading = false;
+      })
+      .addCase(deleteIncomeExpense.rejected, (state) => {
+        state.deleteLoading = false;
+      });
     builder
       .addCase(createincomeExpense.pending, (state) => {
         state.createLoading = true;
@@ -104,9 +113,12 @@ export const incomeExpenseSlice = createSlice({
     selectIncomeExpenseCreateLoading: (state) => state.createLoading,
     selectOneIncomeExpenseCreate: (state) => state.oneIncomeExpense,
     selectOneIncomeExpenseCreateLoading: (state) => state.oneIncomeExpenseLoading,
+    selectTotal: (state) => state.total,
   },
 });
 
 export const incomeExpenseReducer = incomeExpenseSlice.reducer;
 
-export const {selectIncomesExpenses, selectIncomesExpensesLoading, selectIncomeExpense, selectIncomeExpenseUpdate,selectOneIncomeExpenseCreate, selectIncomeExpenseCreateLoading, selectOneIncomeExpenseCreateLoading} = incomeExpenseSlice.selectors;
+export const { plusTotal, minusTotal } = incomeExpenseSlice.actions;
+
+export const {selectIncomesExpenses, selectIncomesExpensesLoading, selectTotal, selectIncomeExpense, selectIncomeExpenseUpdate,selectOneIncomeExpenseCreate, selectIncomeExpenseCreateLoading, selectOneIncomeExpenseCreateLoading} = incomeExpenseSlice.selectors;

@@ -1,10 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import FormCategories from "../../components/Forms/FormCategories";
-import { ApiCategory, ApiIncomeExpense } from "../../types";
-import { fetchOneCategory, fetchOneIncomeExpense, updateCategory, updateIncomeExpense } from "../../store/financeThunks";
+import { ApiIncomeExpense } from "../../types";
+import { fetchOneIncomeExpense, updateIncomeExpense } from "../../store/financeThunks";
 import { toast } from "react-toastify";
-import { selectCategory, selectCategoryLoading, selectCategoryUpdate } from "../../store/categoriesSlice";
 import Spinner from "../../components/Spinner/Spinner";
 import { useEffect } from "react";
 import { selectOneIncomeExpenseCreate, selectOneIncomeExpenseCreateLoading } from "../../store/incomeExpenseSlice";
