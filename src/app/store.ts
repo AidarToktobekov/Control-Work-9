@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { categoryReducer } from '../store/categoriesSlice';
+import { incomeExpenseReducer } from '../store/incomeExpenseSlice';
 
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
-    // dishes: dishesReducer,
+    incomeExpense: incomeExpenseReducer,
   }
 });
 

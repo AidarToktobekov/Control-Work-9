@@ -32,19 +32,18 @@ const Categories = ()=>{
             </NavLink>
         </div>
         <div className="list-group">
-        {categoriesLoading ? (
-        <Spinner />
-        ) : (
-            categories.map((category) => (
-            <CategoryItem
-                key={category.id}
-                id={category.id}
-                name={category.name}
-                type={category.type}
-                deleteCategory={()=>onDelete(category.id)}
-            />
-            ))
-      )}
+            {categoriesLoading ? (
+            <Spinner />
+            ) : (
+                categories.map((category) => (
+                <CategoryItem
+                    key={category.id}
+                    id={category.id}
+                    name={category.name}
+                    type={category.type}
+                    deleteCategory={()=>onDelete(category.id)}
+                />
+            )))}
         </div>
      </div>
     ) 

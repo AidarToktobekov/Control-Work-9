@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosApi from '../axiosApi';
-import { ApiCategories, ApiCategory, Category } from '../types';
+import { ApiCategories, ApiCategory, ApiIncomeExpense, ApiIncomesExpenses, Category, IncomeExpense } from '../types';
 
 export const fetchCategory = createAsyncThunk<
   Category[],
@@ -38,7 +38,7 @@ export const createCategory = createAsyncThunk<void, ApiCategory>(
   },
 );
 
-export const fetchOneCategory = createAsyncThunk<ApiCategory, string>(
+export const fetchOneCategory = createAsyncThunk<Category, string>(
   'category/fetchOne',
   async (id) => {
     const { data: category } = await axiosApi.get<ApiCategory | null>(
@@ -48,8 +48,13 @@ export const fetchOneCategory = createAsyncThunk<ApiCategory, string>(
     if (category === null) {
       throw new Error('Not found');
     }
+    
+    const categoryWithId = {
+      id: id,
+      ...category,
+    }
 
-    return category;
+    return categoryWithId;
   },
 );
 
@@ -64,3 +69,71 @@ export const updateCategory = createAsyncThunk<void, UpdateCategoryArg>(
     await axiosApi.put(`/categories/${id}.json`, apiCategory);
   },
 );
+
+export const fetchIncomeExpense = createAsyncThunk<
+IncomeExpense[],
+  undefined
+>('incomeExpense/fetchIncomeExpense', async () => {
+  const incomeExpenseResponse = await axiosApi.get<ApiIncomesExpenses>('/ExpenseIncome.json');
+  const incomesExpenses:ApiIncomesExpenses = incomeExpenseResponse.data;
+
+  let newIncomeExpense: IncomeExpense[] = [];
+
+  if (incomesExpenses) {
+    newIncomeExpense = Object.keys(incomesExpenses).map((key: string) => {
+      const incomeExpense = incomesExpenses[key];
+      return {
+        id: key,
+        ...incomeExpense,
+      };
+  })
+
+  return newIncomeExpense;
+  }})
+
+  export const fetchOneIncomeExpense = createAsyncThunk<IncomeExpense, string>(
+    'incomeExpense/fetchOne',
+    async (fetchId) => {
+      const { data: incomeExpense } = await axiosApi.get<IncomeExpense | null>(
+        `/ExpenseIncome/${fetchId}.json`,
+      );
+  
+      if (incomeExpense === null) {
+        throw new Error('Not found');
+      }
+      
+      const incomeExpenseWith = {
+        ...incomeExpense,
+      }
+  
+      return incomeExpenseWith;
+    },
+  );
+
+  export const deleteIncomeExpense = createAsyncThunk<void, string>(
+    'incomeExpense/deleteIncomeExpense',
+    async (expenseIncomeId) => {
+      await axiosApi.delete('/ExpenseIncome/' + expenseIncomeId + '.json');
+    },
+  );
+
+  export interface UpdateIncomeExpenseArg {
+    id: string;
+    apiIncomeExpense: ApiIncomeExpense;
+  }
+  
+
+  export const updateIncomeExpense = createAsyncThunk<void, UpdateIncomeExpenseArg>(
+    'incomeExpense/update',
+    async ({ id, apiIncomeExpense }) => {
+      await axiosApi.put(`/ExpenseIncome/${id}.json`, apiIncomeExpense);
+    },
+  );
+
+  export const createincomeExpense = createAsyncThunk<void, ApiIncomeExpense>(
+    'incomeExpense/create',
+    async (incomeExpense) => {
+      await axiosApi.post('/ExpenseIncome.json', incomeExpense);
+    },
+  );
+  
